@@ -1,0 +1,116 @@
+#heading {
+  margin: 10px 0px 10px 0px;
+  font-size: 40px;
+  font-weight: bold;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  font-style: italic;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: auto;
+}
+
+#content {
+  align-items: center;
+  display: flex;
+  height: 80vh;
+  width: auto;
+  padding: 0px 50px;
+  box-shadow: 5px 5px 0px #1b1b1b, 10px 10px 0px #444444, 15px 15px 0px #212121,
+    5px 5px 15px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  background-image: url(/images/wooden-table.jpg);
+}
+
+#calculator {
+  display: flex;
+  justify-content: center;
+  width: 475px;
+  height: 500px;
+  border: 2px solid black;
+  background-color: rgb(96, 96, 96);
+  box-shadow: 5px 5px 0px #1b1b1b, 10px 10px 0px #444444, 15px 15px 0px #212121,
+    5px 5px 15px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  flex: 1;
+}
+
+#display {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  border: 2px solid black;
+  border-radius: 8px;
+  height: 100px;
+  margin: 20px 30px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  font-size: 50px;
+}
+
+.display-numbers {
+  display: flex;
+  flex-direction: row;
+  padding-right: 10px;
+  overflow: hidden;
+}
+
+#clear-delete {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  gap: 25px;
+}
+
+#clear-delete button {
+  font-size: 30px;
+  padding: 10px 40px;
+  border-radius: 8px;
+}
+
+.c {
+  background-color: blanchedalmond;
+}
+
+.del {
+  background-color: rgb(255, 116, 116);
+}
+
+#buttons-number-operand {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: auto;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+}
+
+#buttons-number-operand button {
+  font-size: 25px;
+  padding: 10px;
+  border-radius: 8px;
+  flex-basis: 94px;
+}
+
+button:hover {
+  transform: scale(1.03);
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.operator {
+  background-color: orange;
+}
