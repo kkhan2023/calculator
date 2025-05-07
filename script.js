@@ -1,10 +1,6 @@
-// Your calculator is going to contain functions for all of the basic math operators you typically find on calculators, so start by creating functions for the following items and testing them in your browser’s console:
-// add
-// subtract
-// multiply
-// divide
-
+// DOM elements & nodes selected
 const calculator = document.querySelector("#calculator")
+const display = document.querySelector("#display")
 const displayNumbers = document.querySelector(".display-numbers")
 const addOperand = document.querySelector("#add")
 const subtractOperand = document.querySelector("#minus")
@@ -25,197 +21,164 @@ const clear = document.querySelector("#clear")
 const dot = document.querySelector("#dot")
 const del = document.querySelector("#delete")
 
+// Declared global variables
+let displayVal = "0"
 let number1 = ""
 let operator = ""
 let number2 = ""
-let decimal = ""
+let shouldResetDisplay = false
 
-zero.addEventListener("click", (e) => {
+// Display 0 as the default number on the display
+function displayValue() {
+  displayNumbers.textContent = displayVal
+}
+displayValue()
+
+// Helper function to reset the display
+function resetDisplayIfNeeded() {
+  if (shouldResetDisplay) {
+    displayVal = "0"
+    shouldResetDisplay = false
+  }
+}
+
+// Click event listeners for number buttons
+function handleNumberInput(num) {
+  resetDisplayIfNeeded()
+
   if (!operator) {
-    number1 = (number1 || "") + "0" // Build number1 if operator isn't set
+    number1 += num
+    displayVal = number1
   } else {
-    number2 = (number2 || "") + "0" // Build number2 if operator is set
+    number2 += num
+    displayVal = number2
+  }
+  updateDisplay()
+}
+
+;[zero, one, two, three, four, five, six, seven, eight, nine].forEach(
+  (btn, idx) => {
+    btn.addEventListener("click", () => handleNumberInput(idx.toString()))
+  }
+)
+
+dot.addEventListener("click", () => {
+  resetDisplayIfNeeded()
+
+  if (!operator && !number1.includes(".")) {
+    number1 += "."
+    displayVal = number1
+  } else if (operator && !number2.includes(".")) {
+    number2 += "."
+    displayVal = number2
   }
   updateDisplay()
 })
 
-one.addEventListener("click", (e) => {
-  if (!operator) {
-    number1 = (number1 || "") + "1" // Build number1 if operator isn't set
-  } else {
-    number2 = (number2 || "") + "1" // Build number2 if operator is set
-  }
-  updateDisplay()
-})
-
-two.addEventListener("click", (e) => {
-  if (!operator) {
-    number1 = (number1 || "") + 2
-  } else {
-    number2 = (number2 || "") + 2
-  }
-  updateDisplay()
-})
-
-three.addEventListener("click", (e) => {
-  if (!operator) {
-    number1 = (number1 || "") + 3
-  } else {
-    number2 = (number2 || "") + 3
-  }
-  updateDisplay()
-})
-
-four.addEventListener("click", (e) => {
-  if (!operator) {
-    number1 = (number1 || "") + 4
-  } else {
-    number2 = (number2 || "") + 4
-  }
-  updateDisplay()
-})
-
-five.addEventListener("click", (e) => {
-  if (!operator) {
-    number1 = (number1 || "") + 5
-  } else {
-    number2 = (number2 || "") + 5
-  }
-  updateDisplay()
-})
-
-six.addEventListener("click", (e) => {
-  if (!operator) {
-    number1 = (number1 || "") + 6
-  } else {
-    number2 = (number2 || "") + 6
-  }
-  updateDisplay()
-})
-
-seven.addEventListener("click", (e) => {
-  if (!operator) {
-    number1 = (number1 || "") + 7
-  } else {
-    number2 = (number2 || "") + 7
-  }
-  updateDisplay()
-})
-
-eight.addEventListener("click", (e) => {
-  if (!operator) {
-    number1 = (number1 || "") + 8
-  } else {
-    number2 = (number2 || "") + 8
-  }
-  updateDisplay()
-})
-
-nine.addEventListener("click", (e) => {
-  if (!operator) {
-    number1 = (number1 || "") + 9
-  } else {
-    number2 = (number2 || "") + 9
-  }
-  updateDisplay()
-})
-
-dot.addEventListener("click", (e) => {})
-
-addOperand.addEventListener("click", (e) => {
-  if (!operator && number1) {
-    operator = "+"
-    updateDisplay()
-  }
-})
-
-subtractOperand.addEventListener("click", (e) => {
-  if (!operator && number1) {
-    operator = "-"
-    updateDisplay()
-  }
-})
-
-multiplyOperand.addEventListener("click", (e) => {
-  if (!operator && number1) {
-    operator = "*"
-    updateDisplay()
-  }
-})
-
-divideOperand.addEventListener("click", (e) => {
-  if (!operator && number1) {
-    operator = "/"
-    updateDisplay()
-  }
-})
-
-equalsOperand.addEventListener("click", (e) => {
-  if (number1 && operator && number2) {
-    const result = operation(Number(number1), operator, Number(number2))
-    clearDisplay()
-    displayNumbers.textContent = result
-
-    number1 = result.toString()
+// Operand buttons
+function handleOperatorInput(op) {
+  if (number1 && number2) {
+    number1 = operate(Number(number1), operator, Number(number2)).toString()
     number2 = ""
-    operator = ""
   }
-})
-
-clear.addEventListener("click", () => {
-  clearDisplay()
-})
-
-del.addEventListener("click", () => {
-  deleteNumber()
-})
-
-function clearDisplay() {
-  displayNumbers.textContent = `${(number1 = "")} ${(operator =
-    "")} ${(number2 = "")}`
+  operator = op
+  shouldResetDisplay = true
+  updateDisplay()
 }
 
-function deleteNumber() {
-  if (number2) {
-    number2 = number2.slice(0, -1)
-  } else if (operator) {
-    operator = operator.slice(0, -1)
-  } else if (number1) {
+addOperand.addEventListener("click", () => handleOperatorInput("+"))
+subtractOperand.addEventListener("click", () => handleOperatorInput("-"))
+multiplyOperand.addEventListener("click", () => handleOperatorInput("*"))
+divideOperand.addEventListener("click", () => handleOperatorInput("/"))
+
+// Equals button
+equalsOperand.addEventListener("click", () => {
+  if (!number1 || !operator || !number2) return
+
+  const result = operate(Number(number1), operator, Number(number2))
+  displayVal = result.toString()
+  number1 = result.toString()
+  operator = ""
+  number2 = ""
+  shouldResetDisplay = true
+  updateDisplay()
+})
+
+// Clear button
+clear.addEventListener("click", () => {
+  displayVal = "0"
+  number1 = ""
+  operator = ""
+  number2 = ""
+  shouldResetDisplay = false
+  updateDisplay()
+})
+
+// Delete button
+function deleteLastInput() {
+  resetDisplayIfNeeded()
+
+  if (!operator) {
     number1 = number1.slice(0, -1)
+    displayVal = number1 || "0"
+  } else if (operator && !number2) {
+    operator = ""
+  } else {
+    number2 = number2.slice(0, -1)
+    displayVal = number2 || "0"
   }
   updateDisplay()
 }
 
+del.addEventListener("click", deleteLastInput)
+
+// Update display
 function updateDisplay() {
-  displayNumbers.textContent = `${number1 || ""} ${operator || ""} ${
-    number2 || ""
-  }`
+  displayNumbers.textContent =
+    `${number1} ${operator} ${number2}`.trim() || displayVal
 }
 
-const add = (val1, val2) => {
-  return val1 + val2
-}
-
-const subtract = (val1, val2) => {
-  return val1 - val2
-}
-
-const multiply = (val1, val2) => {
-  return val1 * val2
-}
-
-const divide = (val1, val2) => {
+// Error handling for division by zero
+function handleDivideByZero(val1, val2) {
+  if (val1 === 0 && val2 === 0) return "Undefined"
+  if (val2 === 0) return "Error: Division by 0"
   return val1 / val2
 }
 
-const operation = (val1, operator, val2) => {
-  if (operator === "+") {
-    return add(val1, val2)
-  } else if (operator === "-") {
-    return subtract(val1, val2)
-  } else if (operator === "*") {
-    return multiply(val1, val2)
-  } else if (operator === "/") {
-    return divide(val1, val2)
+// Math operations
+const add = (val1, val2) => val1 + val2
+const subtract = (val1, val2) => val1 - val2
+const multiply = (val1, val2) => val1 * val2
+const divide = handleDivideByZero
+
+function operate(val1, operator, val2) {
+  switch (operator) {
+    case "+":
+      return add(val1, val2)
+    case "-":
+      return subtract(val1, val2)
+    case "*":
+      return multiply(val1, val2)
+    case "/":
+      return divide(val1, val2)
+    default:
+      return val1
   }
 }
+
+// Add keyboard support
+document.addEventListener("keydown", (e) => {
+  if (!isNaN(e.key)) {
+    handleNumberInput(e.key)
+  } else if (["+", "-", "*", "/"].includes(e.key)) {
+    handleOperatorInput(e.key)
+  } else if (e.key === "Enter" || e.key === "=") {
+    equalsOperand.click()
+  } else if (e.key === "Backspace") {
+    deleteLastInput()
+  } else if (e.key === "Escape") {
+    clear.click()
+  } else if (e.key === ".") {
+    dot.click()
+  }
+})

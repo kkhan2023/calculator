@@ -27,7 +27,6 @@ body {
 }
 
 #calculator {
-  display: flex;
   justify-content: center;
   width: 475px;
   height: 500px;
@@ -46,6 +45,7 @@ body {
 #display {
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
   border: 2px solid black;
@@ -54,7 +54,7 @@ body {
   margin: 20px 30px;
   background-color: rgb(255, 255, 255);
   color: rgb(0, 0, 0);
-  font-size: 50px;
+  font-size: 40px;
 }
 
 .display-numbers {
@@ -62,6 +62,8 @@ body {
   flex-direction: row;
   padding-right: 10px;
   overflow: hidden;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
 }
 
 #clear-delete {
@@ -76,7 +78,6 @@ body {
 #clear-delete button {
   font-size: 30px;
   padding: 10px 40px;
-  border-radius: 8px;
 }
 
 .c {
@@ -101,14 +102,19 @@ body {
 #buttons-number-operand button {
   font-size: 25px;
   padding: 10px;
-  border-radius: 8px;
+  /* border-radius: 8px; */
   flex-basis: 94px;
 }
 
+button {
+  box-shadow: 5px 1.8px;
+}
+
 button:hover {
-  transform: scale(1.03);
-  cursor: pointer;
+  transform: scale(0.96);
   transition: 0.2s;
+  background-color: cadetblue;
+  box-shadow: 1.5px 0.5px;
 }
 
 .operator {
